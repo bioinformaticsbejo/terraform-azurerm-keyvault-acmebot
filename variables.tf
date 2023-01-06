@@ -133,7 +133,7 @@ variable "vnet_route_all_enabled" {
 
 variable "virtual_network_subnet_ids_integration" {
   type = list(string)
-  description = "Single subnet it to integrate function into. Not compatible with allowed_ip_addresses"
+  description = "Single subnet to integrate function into. Not compatible with allowed_ip_addresses"
   default = []
   validation {
     condition     = length(var.virtual_network_subnet_ids_integration) == 0 || length(var.virtual_network_subnet_ids_integration) == 1
@@ -144,9 +144,16 @@ variable "virtual_network_subnet_ids_integration" {
 
 variable "virtual_network_subnet_ids_pe" {
   type = list(string)
-  description = "Single subnet it to integrate function into. Not compatible with allowed_ip_addresses"
+  description = "List of subnets for creating Private Endpoints"
   default = []
 }
+
+variable "virtual_network_subnet_ids_extra" {
+  type = list(string)
+  description = "List of extra subnets to allow access to the function"
+  default = []
+}
+
 
 variable "private_dns_zone_rg" {
   type = string
@@ -343,12 +350,14 @@ locals {
 locals {
   virtual_network_subnet_ids_integration_dict = {for i, v in var.virtual_network_subnet_ids_integration: i => v}
   virtual_network_subnet_ids_pe_dict          = {for i, v in var.virtual_network_subnet_ids_pe         : i => v}
+  virtual_network_subnet_ids_extra_dict       = {for i, v in var.virtual_network_subnet_ids_extra      : i => v}
 
   function_ip_restrictions = {
     for l, w in concat(
       [for v in var.allowed_ip_addresses                  : {"ip_address" =    v, "virtual_network_subnet_id" = null}],
       [for v in var.virtual_network_subnet_ids_pe         : {"ip_address" = null, "virtual_network_subnet_id" =    v}],
-      [for v in var.virtual_network_subnet_ids_integration: {"ip_address" = null, "virtual_network_subnet_id" =    v}]
+      [for v in var.virtual_network_subnet_ids_integration: {"ip_address" = null, "virtual_network_subnet_id" =    v}],
+      [for v in var.virtual_network_subnet_ids_extra      : {"ip_address" = null, "virtual_network_subnet_id" =    v}]
     ): l => w
   }
 
