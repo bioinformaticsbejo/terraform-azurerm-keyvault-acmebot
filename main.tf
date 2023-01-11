@@ -68,11 +68,11 @@ resource "azurerm_windows_function_app" "function" {
     "WEBSITE_TIME_ZONE"        = var.time_zone
   }, local.acmebot_app_settings, var.app_settings)
 
+  virtual_network_subnet_id = length(var.virtual_network_subnet_ids_integration) > 0 ? var.virtual_network_subnet_ids_integration[0] : null
+
   identity {
     type = "SystemAssigned"
   }
-
-  virtual_network_subnet_id = length(var.virtual_network_subnet_ids_integration) > 0 ? var.virtual_network_subnet_ids_integration[0] : null
 
   dynamic "auth_settings" {
     for_each = toset(var.auth_settings != null ? [1] : [])
@@ -92,8 +92,8 @@ resource "azurerm_windows_function_app" "function" {
     application_insights_connection_string = azurerm_application_insights.insights.connection_string
     ftps_state                             = "Disabled"
     minimum_tls_version                    = "1.2"
-    always_on                              = false
     http2_enabled                          = true
+    always_on                              = var.always_on
     app_scale_limit                        = var.app_scale_limit
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
 

@@ -119,6 +119,12 @@ variable "sku_name" {
   }
 }
 
+variable "always_on" {
+    type = bool
+    default = false
+    nullable = false
+}
+
 variable "app_scale_limit" {
   type = number
   description = "Function app scale limit"
