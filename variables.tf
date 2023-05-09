@@ -41,9 +41,10 @@ variable "auth_settings" {
     token_store_enabled           = bool
     unauthenticated_client_action = string
     active_directory = object({
-      client_id         = string
-      tenant_id         = string
-      allowed_audiences = list(string)
+      client_id                  = string
+      client_secret_setting_name = string
+      tenant_id                  = string
+      allowed_audiences          = list(string)
     })
   })
   description = "Authentication settings for the function app"

@@ -127,6 +127,7 @@ resource "azurerm_windows_function_app" "function" {
       forward_proxy_convention = "NoProxy"
       active_directory_v2 {
         client_id                        = var.auth_settings.active_directory.client_id
+        client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
         tenant_auth_endpoint             = "https://login.microsoftonline.com/v2.0/${var.auth_settings.active_directory.tenant_id}/"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
       }
