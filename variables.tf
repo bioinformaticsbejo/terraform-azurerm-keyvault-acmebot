@@ -42,6 +42,7 @@ variable "auth_settings" {
     unauthenticated_client_action = string
     active_directory = object({
       client_id         = string
+      tenant_id         = string
       allowed_audiences = list(string)
     })
   })
