@@ -121,14 +121,15 @@ resource "azurerm_windows_function_app" "function" {
       config_file_path         = null
       require_authentication   = true
       require_https            = true
-      default_provider         = "AzureActiveDirectory"
+      default_provider         = "azureactivedirectory"
       excluded_paths           = []
       http_route_api_prefix    = "/.auth"
       forward_proxy_convention = "NoProxy"
       active_directory_v2 {
         client_id                        = var.auth_settings.active_directory.client_id
         client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
-        tenant_auth_endpoint             = "https://login.microsoftonline.com/v2.0/${var.auth_settings.active_directory.tenant_id}/"
+
+        tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
       }
       login {
@@ -141,6 +142,24 @@ resource "azurerm_windows_function_app" "function" {
         token_store_enabled               = var.auth_settings.token_store_enabled
         validate_nonce                    = true
       }
+      apple_v2 {
+        login_scopes = []
+      }
+      facebook_v2 {
+        login_scopes = []
+      }
+      github_v2 {
+        login_scopes = []
+      }
+      google_v2 {
+        allowed_audiences = []
+        login_scopes      = []
+      }
+      microsoft_v2 {
+        allowed_audiences = []
+        login_scopes      = []
+      }
+      twitter_v2 {}
     }
   }
 
