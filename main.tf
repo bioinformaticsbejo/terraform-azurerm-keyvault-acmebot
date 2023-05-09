@@ -128,7 +128,6 @@ resource "azurerm_windows_function_app" "function" {
       active_directory_v2 {
         client_id                        = var.auth_settings.active_directory.client_id
         client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
-
         tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
       }
@@ -142,24 +141,24 @@ resource "azurerm_windows_function_app" "function" {
         token_store_enabled               = var.auth_settings.token_store_enabled
         validate_nonce                    = true
       }
-      apple_v2 {
-        login_scopes = []
-      }
-      facebook_v2 {
-        login_scopes = []
-      }
-      github_v2 {
-        login_scopes = []
-      }
-      google_v2 {
-        allowed_audiences = []
-        login_scopes      = []
-      }
-      microsoft_v2 {
-        allowed_audiences = []
-        login_scopes      = []
-      }
-      twitter_v2 {}
+      # apple_v2 {
+      #   login_scopes = []
+      # }
+      # facebook_v2 {
+      #   login_scopes = []
+      # }
+      # github_v2 {
+      #   login_scopes = []
+      # }
+      # google_v2 {
+      #   allowed_audiences = []
+      #   login_scopes      = []
+      # }
+      # microsoft_v2 {
+      #   allowed_audiences = []
+      #   login_scopes      = []
+      # }
+      # twitter_v2 {}
     }
   }
 
