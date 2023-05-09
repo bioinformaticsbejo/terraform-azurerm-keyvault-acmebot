@@ -17,6 +17,10 @@ resource "azurerm_storage_account" "storage" {
       length(var.virtual_network_subnet_ids_pe         ) > 0 ? var.virtual_network_subnet_ids_pe          : [],
       length(var.virtual_network_subnet_ids_integration) > 0 ? var.virtual_network_subnet_ids_integration : []
     )
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
   }
 }
 
@@ -27,7 +31,13 @@ resource "azurerm_service_plan" "serverfarm" {
   tags                = merge(var.tags, {})
 
   os_type  = "Windows"
+
   sku_name = var.sku_name
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "azurerm_log_analytics_workspace" "workspace" {
@@ -37,6 +47,11 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   sku                 = "PerGB2018"
   retention_in_days   = 30
   tags                = merge(var.tags, {})
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "azurerm_application_insights" "insights" {
@@ -49,6 +64,11 @@ resource "azurerm_application_insights" "insights" {
   depends_on          = [
     azurerm_log_analytics_workspace.workspace
   ]
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "azurerm_windows_function_app" "function" {
@@ -98,7 +118,7 @@ resource "azurerm_windows_function_app" "function" {
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
 
     application_stack {
-      dotnet_version = "6"
+      dotnet_version = "v6.0"
     }
 
     dynamic "ip_restriction" {
@@ -206,4 +226,11 @@ resource "azurerm_private_dns_a_record" "dns_a_function_web" {
   depends_on = [
     azurerm_private_endpoint.func-pe
   ]
+  lifecycle {
+    ignore_changes = [
+      tags,
+      app_settings["MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"],
+      sticky_settings["app_setting_names"]
+    ]
+  }
 }
