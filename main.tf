@@ -129,7 +129,6 @@ resource "azurerm_windows_function_app" "function" {
         client_id                        = var.auth_settings.active_directory.client_id
         tenant_auth_endpoint             = "https://login.microsoftonline.com/v2.0/${var.auth_settings.active_directory.tenant_id}/"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
-        login_scopes                     = null
       }
       login {
         allowed_external_redirect_urls    = []
