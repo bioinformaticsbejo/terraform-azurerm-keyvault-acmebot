@@ -95,19 +95,77 @@ resource "azurerm_windows_function_app" "function" {
     type = "SystemAssigned"
   }
 
-  dynamic "auth_settings" {
+  # dynamic "auth_settings" {
+  #   for_each = toset(var.auth_settings != null ? [1] : [])
+  #   content {
+  #     enabled                       = var.auth_settings.enabled
+  #     unauthenticated_client_action = var.auth_settings.unauthenticated_client_action
+  #     issuer                        = var.auth_settings.issuer
+  #     token_store_enabled           = var.auth_settings.token_store_enabled
+  #     active_directory {
+  #       allowed_audiences = var.auth_settings.active_directory.allowed_audiences
+  #       client_id         = var.auth_settings.active_directory.client_id
+  #     }
+  #   }
+  # }
+
+
+  dynamic "auth_settings_v2" {
     for_each = toset(var.auth_settings != null ? [1] : [])
+
     content {
-      enabled                       = var.auth_settings.enabled
-      unauthenticated_client_action = var.auth_settings.unauthenticated_client_action
-      issuer                        = var.auth_settings.issuer
-      token_store_enabled           = var.auth_settings.token_store_enabled
-      active_directory {
-        allowed_audiences = var.auth_settings.active_directory.allowed_audiences
-        client_id         = var.auth_settings.active_directory.client_id
+      auth_enabled             = var.auth_settings.enabled
+      default_provider         = "azureactivedirectory"
+      excluded_paths           = []
+      forward_proxy_convention = "NoProxy"
+      http_route_api_prefix    = "/.auth"
+      require_authentication   = true
+      require_https            = true
+      runtime_version          = "~1"
+      unauthenticated_action   = var.auth_settings.unauthenticated_client_action
+      active_directory_v2 {
+        allowed_applications            = []
+        allowed_audiences               = var.auth_settings.active_directory.allowed_audiences
+        allowed_groups                  = []
+        allowed_identities              = []
+        client_id                       = var.auth_settings.active_directory.client_id
+        jwt_allowed_client_applications = []
+        jwt_allowed_groups              = []
+        login_parameters                = {}
+        www_authentication_disabled     = false
       }
+      login {
+        allowed_external_redirect_urls    = []
+        cookie_expiration_convention      = "FixedTime"
+        cookie_expiration_time            = "08:00:00"
+        nonce_expiration_time             = "00:05:00"
+        preserve_url_fragments_for_logins = false
+        token_refresh_extension_time      = 72
+        token_store_enabled               = var.auth_settings.token_store_enabled
+        validate_nonce                    = true
+      }
+      apple_v2 {
+        login_scopes = []
+      }
+      facebook_v2 {
+        login_scopes = []
+      }
+      github_v2 {
+        login_scopes = []
+      }
+      google_v2 {
+        allowed_audiences = []
+        login_scopes      = []
+      }
+      microsoft_v2 {
+        allowed_audiences = []
+        login_scopes      = []
+      }
+      twitter_v2 {}
     }
   }
+
+
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.insights.connection_string
