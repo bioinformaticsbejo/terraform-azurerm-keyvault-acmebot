@@ -144,6 +144,14 @@ resource "azurerm_windows_function_app" "function" {
     azurerm_application_insights.insights,
     azurerm_service_plan.serverfarm
   ]
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+      app_settings["MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"],
+      sticky_settings["app_setting_names"]
+    ]
+  }
 }
 
 resource "azurerm_private_endpoint" "func-pe" {
@@ -227,11 +235,4 @@ resource "azurerm_private_dns_a_record" "dns_a_function_web" {
   depends_on = [
     azurerm_private_endpoint.func-pe
   ]
-  lifecycle {
-    ignore_changes = [
-      tags,
-      app_settings["MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"],
-      sticky_settings["app_setting_names"]
-    ]
-  }
 }
