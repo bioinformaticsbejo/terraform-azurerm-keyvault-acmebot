@@ -166,9 +166,11 @@ resource "azurerm_windows_function_app" "function" {
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.insights.connection_string
+    application_insights_key               = azurerm_application_insights.instrumentation_key
     ftps_state                             = "Disabled"
     minimum_tls_version                    = "1.2"
     http2_enabled                          = true
+    health_check_path                      = "/dashboard"
     always_on                              = var.always_on
     app_scale_limit                        = var.app_scale_limit
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
