@@ -131,6 +131,16 @@ resource "azurerm_windows_function_app" "function" {
         allowed_audiences               = var.auth_settings.active_directory.allowed_audiences
         login_scopes                    = null
       }
+      login {
+        allowed_external_redirect_urls    = []
+        cookie_expiration_convention      = "FixedTime"
+        cookie_expiration_time            = "08:00:00"
+        nonce_expiration_time             = "00:05:00"
+        preserve_url_fragments_for_logins = false
+        token_refresh_extension_time      = 72
+        token_store_enabled               = var.auth_settings.token_store_enabled
+        validate_nonce                    = true
+      }
     }
   }
 
