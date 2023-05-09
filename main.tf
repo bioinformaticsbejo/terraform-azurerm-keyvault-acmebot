@@ -166,7 +166,7 @@ resource "azurerm_windows_function_app" "function" {
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.insights.connection_string
-    application_insights_key               = azurerm_application_insights.instrumentation_key
+    application_insights_key               = azurerm_application_insights.insights.instrumentation_key
     ftps_state                             = "Disabled"
     minimum_tls_version                    = "1.2"
     http2_enabled                          = true
