@@ -63,6 +63,12 @@ variable "cors_allowed_origins" {
     default  = null
 }
 
+variable "allowed_external_redirect_urls" {
+    type     = list(string)
+    nullable = true
+    default  = null
+}
+
 variable "location" {
   type        = string
   description = "Azure region to create resources."

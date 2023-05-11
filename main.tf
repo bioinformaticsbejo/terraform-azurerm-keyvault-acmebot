@@ -128,11 +128,11 @@ resource "azurerm_windows_function_app" "function" {
       active_directory_v2 {
         client_id                        = var.auth_settings.active_directory.client_id
         client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
-        tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0"
+        tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0/"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
       }
       login {
-        allowed_external_redirect_urls    = []
+        allowed_external_redirect_urls    = var.allowed_external_redirect_urls == null ? [] : var.allowed_external_redirect_urls
         cookie_expiration_convention      = "FixedTime"
         cookie_expiration_time            = "08:00:00"
         nonce_expiration_time             = "00:05:00"
