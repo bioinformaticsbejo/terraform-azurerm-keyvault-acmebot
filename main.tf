@@ -194,6 +194,14 @@ resource "azurerm_windows_function_app" "function" {
         virtual_network_subnet_id = scm_ip_restriction.value.virtual_network_subnet_id
       }
     }
+
+    dynamic "cors" {
+      for_each = toset(var.cors_allowed_origins != null ? [1] : [])
+      content {
+        allowed_origins = var.cors_allowed_origins
+        support_credentials = true
+      }
+    }
   }
 
   depends_on = [

@@ -57,6 +57,12 @@ variable "app_settings" {
   default     = {}
 }
 
+variable "cors_allowed_origins" {
+    type     = list(string)
+    nullable = true
+    default  = null
+}
+
 variable "location" {
   type        = string
   description = "Azure region to create resources."
