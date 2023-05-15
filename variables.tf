@@ -19,6 +19,12 @@ variable "storage_account_name" {
   description = "The name of the Storage Account to create."
 }
 
+variable "storage_account_default_action" {
+  type        = string
+  description = "Default action for Storage Account's network rules."
+  default     = "Deny"
+}
+
 variable "app_insights_name" {
   type        = string
   description = "The name of the Application Insights to create."

@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "storage" {
   tags                            = merge(var.tags, {})
 
   network_rules {
-    default_action             = "Deny"
+    default_action             = var.storage_account_default_action
     ip_rules                   = length(var.allowed_ip_addresses         ) > 0 ? var.allowed_ip_addresses          : null
     virtual_network_subnet_ids = concat(
       length(var.virtual_network_subnet_ids_pe         ) > 0 ? var.virtual_network_subnet_ids_pe          : [],
