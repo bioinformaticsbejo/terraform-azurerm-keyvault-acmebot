@@ -374,10 +374,10 @@ locals {
 
   function_ip_restrictions = {
     for l, w in concat(
-      [for v in var.allowed_ip_addresses                  : {"ip_address" =    v, "virtual_network_subnet_id" = null}],
-      [for v in var.virtual_network_subnet_ids_pe         : {"ip_address" = null, "virtual_network_subnet_id" =    v}],
-      [for v in var.virtual_network_subnet_ids_integration: {"ip_address" = null, "virtual_network_subnet_id" =    v}],
-      [for v in var.virtual_network_subnet_ids_extra      : {"ip_address" = null, "virtual_network_subnet_id" =    v}]
+      [for v in var.allowed_ip_addresses                  : {"ip_address" = length(regexall(".*\\/.*", v)) > 0 ? v : format("%s/32", v), "virtual_network_subnet_id" = null}],
+      [for v in var.virtual_network_subnet_ids_pe         : {"ip_address" =                                                        null, "virtual_network_subnet_id" =    v}],
+      [for v in var.virtual_network_subnet_ids_integration: {"ip_address" =                                                        null, "virtual_network_subnet_id" =    v}],
+      [for v in var.virtual_network_subnet_ids_extra      : {"ip_address" =                                                        null, "virtual_network_subnet_id" =    v}]
     ): l => w
   }
 
