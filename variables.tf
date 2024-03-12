@@ -151,6 +151,12 @@ variable "app_scale_limit" {
   default = 2
 }
 
+variable "ip_restriction_default_action" {
+  type = string
+  description = "The Default action for traffic that does not match any ip_restriction rule."
+  default = "Allow"
+}
+
 variable "vnet_route_all_enabled" {
   type = bool
   description = "Function route all traffic via vnet"
