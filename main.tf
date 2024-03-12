@@ -73,14 +73,13 @@ resource "azurerm_application_insights" "insights" {
 }
 
 resource "azurerm_windows_function_app" "function" {
-  name                          = var.function_app_name
-  resource_group_name           = var.resource_group_name
-  location                      = var.location
-  service_plan_id               = azurerm_service_plan.serverfarm.id
-  storage_account_name          = azurerm_storage_account.storage.name
-  storage_account_access_key    = azurerm_storage_account.storage.primary_access_key
-  tags                          = merge(var.tags, {})
-  ip_restriction_default_action = var.ip_restriction_default_action
+  name                       = var.function_app_name
+  resource_group_name        = var.resource_group_name
+  location                   = var.location
+  service_plan_id            = azurerm_service_plan.serverfarm.id
+  storage_account_name       = azurerm_storage_account.storage.name
+  storage_account_access_key = azurerm_storage_account.storage.primary_access_key
+  tags                       = merge(var.tags, {})
 
 
   functions_extension_version = "~4"
@@ -176,6 +175,7 @@ resource "azurerm_windows_function_app" "function" {
     always_on                              = var.always_on
     app_scale_limit                        = var.app_scale_limit
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
+  ip_restriction_default_action            = var.ip_restriction_default_action
 
     application_stack {
       dotnet_version = "v6.0"
