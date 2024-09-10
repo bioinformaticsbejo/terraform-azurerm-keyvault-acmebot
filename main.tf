@@ -172,6 +172,7 @@ resource "azurerm_windows_function_app" "function" {
     minimum_tls_version                    = "1.2"
     http2_enabled                          = true
     health_check_path                      = "/dashboard"
+    health_check_eviction_time_in_min      = 2
     always_on                              = var.always_on
     app_scale_limit                        = var.app_scale_limit
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
