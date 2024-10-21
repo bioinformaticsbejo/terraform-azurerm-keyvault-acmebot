@@ -5,13 +5,13 @@ resource "azurerm_storage_account" "storage" {
   account_kind                    = "StorageV2"
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
-  enable_https_traffic_only       = true
+  https_traffic_only_enabled      = true
   allow_nested_items_to_be_public = false
   min_tls_version                 = "TLS1_2"
   tags                            = merge(var.tags, {})
 
   network_rules {
-    default_action             = "Deny"
+    default_action             = var.storage_account_default_action
     ip_rules                   = length(var.allowed_ip_addresses         ) > 0 ? var.allowed_ip_addresses          : null
     virtual_network_subnet_ids = concat(
       length(var.virtual_network_subnet_ids_pe         ) > 0 ? var.virtual_network_subnet_ids_pe          : [],
@@ -81,6 +81,7 @@ resource "azurerm_windows_function_app" "function" {
   storage_account_access_key = azurerm_storage_account.storage.primary_access_key
   tags                       = merge(var.tags, {})
 
+
   functions_extension_version = "~4"
   https_only                  = true
 
@@ -130,6 +131,7 @@ resource "azurerm_windows_function_app" "function" {
         client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
         tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0/"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
+        allowed_applications             = var.auth_settings.active_directory.allowed_applications
       }
       login {
         allowed_external_redirect_urls    = var.allowed_external_redirect_urls == null ? [] : var.allowed_external_redirect_urls
@@ -171,9 +173,11 @@ resource "azurerm_windows_function_app" "function" {
     minimum_tls_version                    = "1.2"
     http2_enabled                          = true
     health_check_path                      = "/dashboard"
+    health_check_eviction_time_in_min      = 2
     always_on                              = var.always_on
     app_scale_limit                        = var.app_scale_limit
     vnet_route_all_enabled                 = var.vnet_route_all_enabled
+  ip_restriction_default_action            = var.ip_restriction_default_action
 
     application_stack {
       dotnet_version = "v6.0"
