@@ -131,6 +131,7 @@ resource "azurerm_windows_function_app" "function" {
         client_secret_setting_name       = var.auth_settings.active_directory.client_secret_setting_name
         tenant_auth_endpoint             = "https://login.microsoftonline.com/${var.auth_settings.active_directory.tenant_id}/v2.0/"
         allowed_audiences                = var.auth_settings.active_directory.allowed_audiences
+        allowed_applications             = var.auth_settings.active_directory.allowed_applications
       }
       login {
         allowed_external_redirect_urls    = var.allowed_external_redirect_urls == null ? [] : var.allowed_external_redirect_urls
