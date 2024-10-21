@@ -51,6 +51,7 @@ variable "auth_settings" {
       client_secret_setting_name = string
       tenant_id                  = string
       allowed_audiences          = list(string)
+      allowed_applications       = list(string)
     })
   })
   description = "Authentication settings for the function app"
